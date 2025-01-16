@@ -36,3 +36,7 @@ class ASCIIRenderer:
             for px in range(0,self.width):
                 out += arr[py][px]
         return out
+    def writeToFile(self, filePath):
+        out = open(filePath, 'w')
+        out.write(str(self))
+        out.close()
