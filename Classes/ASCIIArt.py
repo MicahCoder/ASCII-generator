@@ -46,7 +46,6 @@ class ASCIIRenderer:
         out.write(str(self))
         out.close()
     def updateWindow(self):
-        print("Reconfiguring:")
         self.__init__(self.imageSupplier(),self.width,False,self.hScaleFactor)
         self.l.config(text=str(self))
         self.l.pack()
