@@ -1,3 +1,4 @@
+from time import sleep
 from PIL import Image
 import numpy
 import tkinter as tk
@@ -5,6 +6,7 @@ ASCIIGradient = '''$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\|()1{}[]?-_+~<>i!lI
 gradientLength = len(ASCIIGradient)
 class ASCIIRenderer:
     def __init__(self, img,width,removeBackground, hScaleFactor):
+        self.hScaleFactor = hScaleFactor
         self.width = width
         self.removeBackground = removeBackground
         if isinstance(img,str):
@@ -14,7 +16,7 @@ class ASCIIRenderer:
         wFactor = width/float(self.img.size[0])
         self.height = int(float(self.img.size[1])*wFactor*hScaleFactor)
         self.img = self.img.resize((width,self.height),Image.Resampling.LANCZOS)
-    #@param val, value between 0 and 1, returns ascii constant. 
+    #@param val, value between 0 and 1, returns ascii constant.
     def charFromVal(self, val):
         return ASCIIGradient[int(val*gradientLength)-1]
     #Uses NTSC method divided by 255
@@ -44,23 +46,32 @@ class ASCIIRenderer:
         out.write(str(self))
         out.close()
     def updateWindow(self):
-        print("Reconfiguring...")
-        self.l = tk.Label(self.root, text = str(self))
-        self.l.config(font =("Courier", 1000//self.width))
+        print("Reconfiguring:")
+        self.__init__(self.imageSupplier(),self.width,False,self.hScaleFactor)
+        self.l.config(text=str(self))
         self.l.pack()
-    def displayVidToWindow(self,width, height):
+        self.root.after(1000//self.FPS,self.updateWindow)
+    def displayVidToWindow(self,image_supplier,FPS,width, height):
+        self.FPS = FPS
         self.root = tk.Tk()
         self.root.geometry(str(width)+"x" + str(height))
-        self.root.after(50,self.updateWindow)
+        self.l =  tk.Label(self.root, text = str(self))
+        self.l.config(font =("Courier", 2000//self.width))
+        self.l.pack()
+        b1 = tk.Button(self.root, text = "Exit",
+                    command = self.root.destroy) 
+        b1.pack()
+        self.imageSupplier = image_supplier
+        self.root.after(0,self.updateWindow)
         self.root.mainloop()
         
     def displayPicToWindow(self,width,height):
         root = tk.Tk()
         root.geometry(str(width)+"x" + str(height))
         l = tk.Label(root, text = str(self))
-        l.config(font =("Courier", 1000//self.width))
+        l.config(font =("Courier", 2000//self.width))
         b1 = tk.Button(root, text = "Exit",
-                    command = self.root.destroy) 
+                    command = root.destroy) 
         
         l.pack()
         b1.pack()
