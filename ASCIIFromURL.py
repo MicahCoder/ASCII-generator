@@ -4,5 +4,6 @@ import requests
 from io import BytesIO
 response = requests.get(input("url: "))
 img =  Image.open(BytesIO(response.content))
-renderOb = ASCIIRenderer(img, 600, False,.55)
-renderOb.writeToFile("Outputs/jackson.txt")
+renderOb = ASCIIRenderer(img, 100, False,.55)
+renderOb.displayPicToWindow(700,700)
+# renderOb.displayToWindow(700,800)
