@@ -57,7 +57,7 @@ class ASCIIRenderer:
         self.FPS = FPS
         self.root = tk.Tk()
         self.root.geometry(str(width)+"x" + str(height))
-        self.w = tk.Slider(self.root, from_=0, to=1000, length=600,tickinterval=50, orient=HORIZONTAL, command = self.sliderChanged)
+        self.w = tk.Slider(self.root, from_=50, to=1000, length=600,tickinterval=50, orient=HORIZONTAL, command = self.sliderChanged)
         self.w.set(250)
         self.l =  tk.Label(self.root, text = str(self))
         self.l.config(font =("Courier", 2000//self.width))
