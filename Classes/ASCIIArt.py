@@ -53,7 +53,6 @@ class ASCIIRenderer:
         self.root.after(1000//self.FPS,self.updateWindow)
     #Slider code inspired by https://www.geeksforgeeks.org/python-tkinter-scale-widget/
     def sliderChanged(self,arg):
-        print(arg)
         self.width = int(arg)
         self.l.config(font =("Courier", 2000//self.width))
     def displayVidToWindow(self,image_supplier,FPS,width, height):
