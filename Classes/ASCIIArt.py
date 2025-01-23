@@ -2,6 +2,7 @@ from time import sleep
 from PIL import Image
 import numpy
 import tkinter as tk
+
 ASCIIGradient = '''$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\|()1{}[]?-_+~<>i!lI;:,"^`'.     '''
 gradientLength = len(ASCIIGradient)
 class ASCIIRenderer:
@@ -46,17 +47,25 @@ class ASCIIRenderer:
         out.write(str(self))
         out.close()
     def updateWindow(self):
-        self.__init__(self.imageSupplier(),self.width,False,self.hScaleFactor)
+        self.__init__(self.imageSupplier(), self.width ,False,self.hScaleFactor)
         self.l.config(text=str(self))
         self.l.pack()
         self.root.after(1000//self.FPS,self.updateWindow)
+    #Slider code inspired by https://www.geeksforgeeks.org/python-tkinter-scale-widget/
+    def sliderChanged(self,arg):
+        print(arg)
+        self.width = int(arg)
+        self.l.config(font =("Courier", 2000//self.width))
     def displayVidToWindow(self,image_supplier,FPS,width, height):
         self.FPS = FPS
         self.root = tk.Tk()
         self.root.geometry(str(width)+"x" + str(height))
+        self.w = tk.Scale(self.root, from_= 50, to= 1000, length=600,tickinterval=50, orient=tk.HORIZONTAL, command= self.sliderChanged)
+        self.w.set(250)
         self.l =  tk.Label(self.root, text = str(self))
         self.l.config(font =("Courier", 2000//self.width))
         self.l.pack()
+        self.w.pack()
         b1 = tk.Button(self.root, text = "Exit",
                     command = self.root.destroy) 
         b1.pack()
