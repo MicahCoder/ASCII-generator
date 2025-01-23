@@ -4,6 +4,6 @@ import requests
 from io import BytesIO
 response = requests.get(input("url: "))
 img =  Image.open(BytesIO(response.content))
-renderOb = ASCIIRenderer(img, 100, False,.55)
+renderOb = ASCIIRenderer(img, 100, True,.55)
 renderOb.displayPicToWindow(700,700)
 # renderOb.displayToWindow(700,800)

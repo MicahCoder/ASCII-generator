@@ -1,7 +1,8 @@
-from time import sleep
 from PIL import Image
 import numpy
 import tkinter as tk
+from rembg import remove
+
 
 ASCIIGradient = '''$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\|()1{}[]?-_+~<>i!lI;:,"^`'.     '''
 gradientLength = len(ASCIIGradient)
@@ -17,6 +18,9 @@ class ASCIIRenderer:
         wFactor = width/float(self.img.size[0])
         self.height = int(float(self.img.size[1])*wFactor*hScaleFactor)
         self.img = self.img.resize((width,self.height),Image.Resampling.LANCZOS)
+        if(removeBackground):
+            print("background removed")
+            self.img = remove(self.img)
     #@param val, value between 0 and 1, returns ascii constant.
     def charFromVal(self, val):
         return ASCIIGradient[int(val*gradientLength)-1]
@@ -33,8 +37,6 @@ class ASCIIRenderer:
         arr = numpy.array(img)
         return [[self.charFromVal(self.rgbToGrayScale(arr[py][px])) for px in range(0,self.width)]for py in range(0,self.height)]
     def __str__(self):
-        if(self.removeBackground):
-            print("not yet")
         arr = self.imageToASCII(self.img)
         out =''
         for py in range(0,self.height):
@@ -47,13 +49,12 @@ class ASCIIRenderer:
         out.write(str(self))
         out.close()
     def updateWindow(self):
-        self.__init__(self.imageSupplier(), self.width ,False,self.hScaleFactor)
+        self.__init__(self.imageSupplier(), self.width , self.removeBackground,self.hScaleFactor)
         self.l.config(text=str(self))
         self.l.pack()
         self.root.after(1000//self.FPS,self.updateWindow)
     #Slider code inspired by https://www.geeksforgeeks.org/python-tkinter-scale-widget/
     def sliderChanged(self,arg):
-        print(arg)
         self.width = int(arg)
         self.l.config(font =("Courier", 2000//self.width))
     def displayVidToWindow(self,image_supplier,FPS,width, height):
@@ -61,7 +62,7 @@ class ASCIIRenderer:
         self.root = tk.Tk()
         self.root.geometry(str(width)+"x" + str(height))
         self.w = tk.Scale(self.root, from_= 50, to= 1000, length=600,tickinterval=50, orient=tk.HORIZONTAL, command= self.sliderChanged)
-        self.w.set(250)
+        self.w.set(self.width)
         self.l =  tk.Label(self.root, text = str(self))
         self.l.config(font =("Courier", 2000//self.width))
         self.l.pack()
