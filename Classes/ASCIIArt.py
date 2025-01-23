@@ -19,7 +19,6 @@ class ASCIIRenderer:
         self.height = int(float(self.img.size[1])*wFactor*hScaleFactor)
         self.img = self.img.resize((width,self.height),Image.Resampling.LANCZOS)
         if(removeBackground):
-            print("background removed")
             self.img = remove(self.img)
     #@param val, value between 0 and 1, returns ascii constant.
     def charFromVal(self, val):
