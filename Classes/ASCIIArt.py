@@ -46,17 +46,21 @@ class ASCIIRenderer:
         out.write(str(self))
         out.close()
     def updateWindow(self):
-        self.__init__(self.imageSupplier(),self.width,False,self.hScaleFactor)
+        self.__init__(self.imageSupplier(),self.w.get(),False,self.hScaleFactor)
+        self.l.config(font =("Courier", 2000//self.width))
         self.l.config(text=str(self))
         self.l.pack()
-        self.root.after(1000//self.FPS,self.updateWindow)
+        self.root.after(0,self.updateWindow)
     def displayVidToWindow(self,image_supplier,FPS,width, height):
         self.FPS = FPS
         self.root = tk.Tk()
         self.root.geometry(str(width)+"x" + str(height))
+        self.w = Tk.Slider(self.root, from_=0, to=1000, orient=HORIZONTAL)
+        self.w.set(250)
         self.l =  tk.Label(self.root, text = str(self))
         self.l.config(font =("Courier", 2000//self.width))
         self.l.pack()
+        self.w.pack()
         b1 = tk.Button(self.root, text = "Exit",
                     command = self.root.destroy) 
         b1.pack()
