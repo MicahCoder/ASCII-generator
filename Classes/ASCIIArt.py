@@ -77,7 +77,7 @@ class ASCIIRenderer:
         root = tk.Tk()
         root.geometry(str(width)+"x" + str(height))
         l = tk.Label(root, text = str(self))
-        l.config(font =("Courier", 2000//self.width))
+        l.config(font =("Courier", 1000//self.width))
         b1 = tk.Button(root, text = "Exit",
                     command = root.destroy) 
         
