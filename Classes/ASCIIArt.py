@@ -7,7 +7,7 @@ from rembg import remove
 ASCIIGradient = '''$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\|()1{}[]?-_+~<>i!lI;:,"^`'.     '''
 gradientLength = len(ASCIIGradient)
 class ASCIIRenderer:
-    def __init__(self, img,width,removeBackground, hScaleFactor):
+    def __init__(self, img,width :int,removeBackground:bool, hScaleFactor:float):
         self.hScaleFactor = hScaleFactor
         self.width = width
         self.removeBackground = removeBackground
@@ -21,10 +21,10 @@ class ASCIIRenderer:
         if(removeBackground):
             self.img = remove(self.img)
     #@param val, value between 0 and 1, returns ascii constant.
-    def charFromVal(self, val):
+    def charFromVal(self, val:float):
         return ASCIIGradient[int(val*gradientLength)-1]
     #Uses NTSC method divided by 255
-    def rgbToGrayScale(self, tup):
+    def rgbToGrayScale(self, tup:tuple):
         try:
             if len(tup) == 3:
                 return (0.00117254901*tup[0]+0.00230196078*tup[1]+0.00044705882*tup[2])
@@ -32,7 +32,7 @@ class ASCIIRenderer:
                 return (0.00117254901*tup[0]+0.00230196078*tup[1]+0.00044705882*tup[2])*tup[3]/255
         except:
             print("That didn't work")
-    def imageToASCII(self, img):
+    def imageToASCII(self, img:Image):
         arr = numpy.array(img)
         return [[self.charFromVal(self.rgbToGrayScale(arr[py][px])) for px in range(0,self.width)]for py in range(0,self.height)]
     def __str__(self):
@@ -43,7 +43,7 @@ class ASCIIRenderer:
             for px in range(0,self.width):
                 out += arr[py][px]
         return out
-    def writeToFile(self, filePath):
+    def writeToFile(self, filePath:str):
         out = open(filePath, 'w')
         out.write(str(self))
         out.close()
@@ -53,10 +53,10 @@ class ASCIIRenderer:
         self.l.pack()
         self.root.after(1000//self.FPS,self.updateWindow)
     #Slider code inspired by https://www.geeksforgeeks.org/python-tkinter-scale-widget/
-    def sliderChanged(self,arg):
-        self.width = int(arg)
+    def sliderChanged(self,length):
+        self.width = int(length)
         self.l.config(font =("Courier", 2000//self.width))
-    def displayVidToWindow(self,image_supplier,FPS,width, height):
+    def displayVidToWindow(self,image_supplier,FPS:int,width:int, height:int):
         self.FPS = FPS
         self.root = tk.Tk()
         self.root.geometry(str(width)+"x" + str(height))
@@ -73,7 +73,7 @@ class ASCIIRenderer:
         self.root.after(0,self.updateWindow)
         self.root.mainloop()
         
-    def displayPicToWindow(self,width,height):
+    def displayPicToWindow(self,width:int,height:int):
         root = tk.Tk()
         root.geometry(str(width)+"x" + str(height))
         l = tk.Label(root, text = str(self))

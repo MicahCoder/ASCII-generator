@@ -8,8 +8,9 @@ def initCamera():
     except:
         return cv2.VideoCapture(1)
 cam = initCamera()
-def img_supplier():
+def img_supplier() -> Image:
     return Image.fromarray(cv2.cvtColor(cam.read()[1],cv2.COLOR_BGR2RGBA))
+#True for background can't render quick enough
 renderOb = ASCIIRenderer(img_supplier(),50,False, .55)
 # renderOb.displayPicToWindow(700,700)AZ
 renderOb.displayVidToWindow(img_supplier,60,1400,900)
