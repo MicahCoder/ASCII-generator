@@ -21,18 +21,15 @@ class ASCIIRenderer:
         if(removeBackground):
             self.img = remove(self.img)
     #@param val, value between 0 and 1, returns ascii constant.
-    def charFromVal(self, val:float):
+    def charFromVal(self, val:float) -> chr:
         return ASCIIGradient[int(val*gradientLength)-1]
     #Uses NTSC method divided by 255
-    def rgbToGrayScale(self, tup:tuple):
-        try:
-            if len(tup) == 3:
-                return (0.00117254901*tup[0]+0.00230196078*tup[1]+0.00044705882*tup[2])
-            else:
-                return (0.00117254901*tup[0]+0.00230196078*tup[1]+0.00044705882*tup[2])*tup[3]/255
-        except:
-            print("That didn't work")
-    def imageToASCII(self, img:Image):
+    def rgbToGrayScale(self, tup:tuple) -> float:
+        # if len(tup) == 3:
+        return (0.00117254901*tup[0]+0.00230196078*tup[1]+0.00044705882*tup[2])
+        # else:
+        #     return (0.00117254901*tup[0]+0.00230196078*tup[1]+0.00044705882*tup[2])*tup[3]/255
+    def imageToASCII(self, img:Image) -> list:
         arr = numpy.array(img)
         return [[self.charFromVal(self.rgbToGrayScale(arr[py][px])) for px in range(0,self.width)]for py in range(0,self.height)]
     def __str__(self):
@@ -60,7 +57,7 @@ class ASCIIRenderer:
         self.FPS = FPS
         self.root = tk.Tk()
         self.root.geometry(str(width)+"x" + str(height))
-        self.w = tk.Scale(self.root, from_= 50, to= 1000, length=600,tickinterval=50, orient=tk.HORIZONTAL, command= self.sliderChanged)
+        self.w = tk.Scale(self.root, from_= 50, to= 750, length=650,tickinterval=50, orient=tk.HORIZONTAL, command= self.sliderChanged)
         self.w.set(self.width)
         self.l =  tk.Label(self.root, text = str(self))
         self.l.config(font =("Courier", 2000//self.width))
