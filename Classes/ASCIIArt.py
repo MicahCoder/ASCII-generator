@@ -7,14 +7,28 @@ from rembg import remove
 ASCIIGradient = '''$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\|()1{}[]?-_+~<>i!lI;:,"^`'.     '''
 gradientLength = len(ASCIIGradient)
 class ASCIIRenderer:
+
     def __init__(self, img,width :int,removeBackground:bool, hScaleFactor:float):
         self.hScaleFactor = hScaleFactor
         self.width = width
         self.removeBackground = removeBackground
-        if isinstance(img,str):
-            self.img = Image.open(img)
-        else:
+        if(isinstance(img,Image)):
+            
             self.img = img
+        elif(isinstance(img,str)):
+            self.img = Image.open(img)
+        elif(isinstance):
+            self.img = Image.fromarray(img)
+        wFactor = width/float(self.img.size[0])
+        self.height = int(float(self.img.size[1])*wFactor*hScaleFactor)
+        self.img = self.img.resize((width,self.height),Image.Resampling.LANCZOS)
+        if(removeBackground):
+            self.img = remove(self.img)
+    def __init__(self, img:numpy.array,width :int,removeBackground:bool, hScaleFactor:float):
+        self.hScaleFactor = hScaleFactor
+        self.width = width
+        self.removeBackground = removeBackground
+        self.img = img
         wFactor = width/float(self.img.size[0])
         self.height = int(float(self.img.size[1])*wFactor*hScaleFactor)
         self.img = self.img.resize((width,self.height),Image.Resampling.LANCZOS)
@@ -25,15 +39,12 @@ class ASCIIRenderer:
         return ASCIIGradient[int(val*gradientLength)-1]
     #Uses NTSC method divided by 255
     def rgbToGrayScale(self, tup:tuple) -> float:
-        # if len(tup) == 3:
         return (0.00117254901*tup[0]+0.00230196078*tup[1]+0.00044705882*tup[2])
-        # else:
-        #     return (0.00117254901*tup[0]+0.00230196078*tup[1]+0.00044705882*tup[2])*tup[3]/255
-    def imageToASCII(self, img:Image) -> list:
-        arr = numpy.array(img)
+    def imageToASCII(self) -> list:
+        arr = numpy.array(self.img)
         return [[self.charFromVal(self.rgbToGrayScale(arr[py][px])) for px in range(0,self.width)]for py in range(0,self.height)]
     def __str__(self):
-        arr = self.imageToASCII(self.img)
+        arr = self.imageToASCII()
         out =''
         for py in range(0,self.height):
             out+='\n'
