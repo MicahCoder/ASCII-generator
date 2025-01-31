@@ -3,6 +3,7 @@ from PIL import Image, ImageFilter
 from cv2 import Canny
 #Much inspired by @link https://www.geeksforgeeks.org/how-to-capture-a-image-from-webcam-in-python/
 import cv2
+#Camera Port can very wuith a webcam or iphone(with mac)
 def initCamera():
     try:
         return cv2.VideoCapture(0)
