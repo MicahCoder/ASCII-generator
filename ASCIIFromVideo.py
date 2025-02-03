@@ -8,7 +8,7 @@ def img_supplier() -> Image:
     return Image.fromarray(cv2.cvtColor(cam.read()[1],cv2.COLOR_BGR2RGB))
 
 renderOb = ASCIIRenderer(img_supplier(),150,False, .6)
-renderOb.displayVidToWindow(img_supplier,int(cam.get(5)),1400,900)
+renderOb.displayVidToWindow(img_supplier,100,1400,900)
 
 
 
